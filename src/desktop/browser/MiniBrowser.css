@@ -1,0 +1,150 @@
+.mini-browser {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 200px;
+  background: #fff;
+}
+
+.mini-browser.compact .quick-links {
+  display: none;
+}
+
+.mini-browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: #f1f3f4;
+  border-bottom: 1px solid #dadce0;
+}
+
+.mini-browser.mobile .mini-browser-bar {
+  padding: 4px 6px;
+  background: #f2f2f7;
+}
+
+.nav-btns {
+  display: flex;
+  gap: 2px;
+}
+
+.nav-btns button,
+.mini-browser-bar > button[type="submit"] {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  background: #e8eaed;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.nav-btns button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.mini-browser-bar > button[type="submit"] {
+  background: #1a73e8;
+  color: #fff;
+}
+
+.vpn-badge {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.mini-browser-bar input {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 16px;
+  background: #fff;
+  font-size: 12px;
+}
+
+.mini-browser.mobile .mini-browser-bar input {
+  border-radius: 8px;
+  background: #e5e5ea;
+}
+
+.open-ext {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  background: #e8eaed;
+  color: inherit;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px 8px;
+  background: #fafafa;
+  border-bottom: 1px solid #eee;
+}
+
+.quick-links button {
+  padding: 4px 10px;
+  border: 1px solid #dadce0;
+  border-radius: 12px;
+  background: #fff;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.quick-links button:hover {
+  background: #e8f0fe;
+  border-color: #1a73e8;
+}
+
+.mini-browser-viewport {
+  position: relative;
+  flex: 1;
+  min-height: 120px;
+  background: #fff;
+}
+
+.mini-browser-viewport iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.frame-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  text-align: center;
+  font-size: 13px;
+}
+
+.frame-fallback button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #1a73e8;
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.frame-fallback button:last-child {
+  background: #e8eaed;
+  color: #333;
+}

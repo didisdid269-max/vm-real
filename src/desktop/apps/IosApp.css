@@ -1,0 +1,135 @@
+.ios-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 520px;
+  background: linear-gradient(180deg, #1c1c1e 0%, #2c2c2e 40%, #3a3a3c 100%);
+  color: #fff;
+  border-radius: 0 0 20px 20px;
+}
+
+.ios-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ios-notch-area {
+  width: 80px;
+  height: 22px;
+  background: #000;
+  border-radius: 0 0 14px 14px;
+}
+
+.ios-home {
+  flex: 1;
+  padding: 8px 18px;
+}
+
+.ios-label {
+  margin: 0 0 16px;
+  font-size: 11px;
+  opacity: 0.75;
+  text-align: center;
+}
+
+.ios-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px 10px;
+}
+
+.ios-app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.ios-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  font-size: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.ios-dock {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin: 12px 24px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 28px;
+}
+
+.dock-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.dock-icon.safari:focus {
+  outline: 2px solid #007aff;
+  outline-offset: 2px;
+}
+
+.ios-safari {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: #fff;
+  color: #000;
+}
+
+.ios-back {
+  align-self: flex-start;
+  margin: 6px 10px 0;
+  padding: 4px 10px;
+  border: none;
+  background: transparent;
+  color: #007aff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.ios-safari .mini-browser {
+  flex: 1;
+  min-height: 0;
+}
+
+.ios-home-indicator {
+  width: 120px;
+  height: 4px;
+  margin: 8px auto 6px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 2px;
+}
+
+.ios-specs {
+  margin: 0;
+  padding: 6px;
+  text-align: center;
+  font-size: 10px;
+  opacity: 0.65;
+}

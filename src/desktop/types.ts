@@ -1,4 +1,4 @@
-export type AppId = "windows11" | "browser" | "android";
+export type AppId = "windows11" | "browser" | "android" | "ios" | "vpn";
 
 export type WindowState = {
   id: AppId;
@@ -19,19 +19,31 @@ export const APP_META: Record<
   windows11: {
     title: "Windows 11",
     icon: "🪟",
-    defaultW: 520,
-    defaultH: 420,
+    defaultW: 560,
+    defaultH: 440,
   },
   browser: {
     title: "Browser",
     icon: "🌐",
-    defaultW: 640,
-    defaultH: 440,
+    defaultW: 720,
+    defaultH: 520,
   },
   android: {
     title: "Android",
     icon: "📱",
     defaultW: 320,
-    defaultH: 580,
+    defaultH: 600,
+  },
+  ios: {
+    title: "iOS",
+    icon: "🍎",
+    defaultW: 300,
+    defaultH: 620,
+  },
+  vpn: {
+    title: "VPN",
+    icon: "🛡️",
+    defaultW: 380,
+    defaultH: 480,
   },
 };

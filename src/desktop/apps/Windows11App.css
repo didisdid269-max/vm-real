@@ -113,3 +113,15 @@
 .bar .fill.fps {
   background: linear-gradient(90deg, #0078d4, #00bcf2);
 }
+
+.win11-edge {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.win11-edge .mini-browser {
+  flex: 1;
+}

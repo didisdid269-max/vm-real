@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AndroidApp } from "./apps/AndroidApp";
 import { BrowserApp } from "./apps/BrowserApp";
+import { IosApp } from "./apps/IosApp";
+import { VpnApp } from "./apps/VpnApp";
 import { Windows11App } from "./apps/Windows11App";
+import { useVpn } from "./vpn/VpnContext";
 import { APP_META, type AppId, type WindowState } from "./types";
 import { Window } from "./Window";
 import "./Desktop.css";
@@ -25,6 +28,7 @@ const INITIAL: WindowState[] = [
   createWindow("windows11", 1, 0),
   createWindow("browser", 2, 1),
   createWindow("android", 3, 2),
+  createWindow("ios", 4, 3),
 ];
 
 function renderApp(id: AppId) {
@@ -35,10 +39,15 @@ function renderApp(id: AppId) {
       return <BrowserApp />;
     case "android":
       return <AndroidApp />;
+    case "ios":
+      return <IosApp />;
+    case "vpn":
+      return <VpnApp />;
   }
 }
 
 export function Desktop() {
+  const { connected, server } = useVpn();
   const [windows, setWindows] = useState<WindowState[]>(INITIAL);
   const [startOpen, setStartOpen] = useState(false);
   const [time, setTime] = useState(() => new Date());
@@ -128,10 +137,7 @@ export function Desktop() {
 
   return (
     <div className="vm-host">
-      <div
-        className="vm-desktop"
-        onClick={() => setStartOpen(false)}
-      >
+      <div className="vm-desktop" onClick={() => setStartOpen(false)}>
         <div className="vm-wallpaper" />
         <div className="vm-icons">
           {(Object.keys(APP_META) as AppId[]).map((id) => (
@@ -155,9 +161,7 @@ export function Desktop() {
             onFocus={() => focus(win.id)}
             onClose={() => closeApp(win.id)}
             onMinimize={() => patch(win.id, { minimized: true })}
-            onMaximize={() =>
-              patch(win.id, { maximized: !win.maximized })
-            }
+            onMaximize={() => patch(win.id, { maximized: !win.maximized })}
             onDragStart={(e) => onDragStart(win.id, e)}
           >
             {renderApp(win.id)}
@@ -166,13 +170,9 @@ export function Desktop() {
 
         {startOpen && (
           <div className="start-menu" onClick={(e) => e.stopPropagation()}>
-            <p className="start-user">VM Desktop</p>
+            <p className="start-user">VM Desktop · RTX 4090</p>
             {(Object.keys(APP_META) as AppId[]).map((id) => (
-              <button
-                key={id}
-                type="button"
-                onClick={() => openApp(id)}
-              >
+              <button key={id} type="button" onClick={() => openApp(id)}>
                 <span>{APP_META[id].icon}</span>
                 {APP_META[id].title}
               </button>
@@ -209,6 +209,14 @@ export function Desktop() {
           })}
         </div>
         <div className="task-tray">
+          <button
+            type="button"
+            className={`tray-vpn ${connected ? "on" : ""}`}
+            onClick={() => openApp("vpn")}
+            title={connected ? `VPN on · ${server.city}` : "VPN off — click to open"}
+          >
+            {connected ? "🛡️ VPN" : "VPN"}
+          </button>
           <span className="tray-spec" title="Host VM specs">
             RTX 4090 · 200 FPS · 128 GB
           </span>
