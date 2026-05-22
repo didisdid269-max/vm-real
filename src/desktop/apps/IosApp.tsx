@@ -28,7 +28,7 @@ export function IosApp() {
           <button type="button" className="ios-back" onClick={() => setScreen("home")}>
             ‹ Home
           </button>
-          <MiniBrowser compact variant="mobile" initialUrl="https://duckduckgo.com/" />
+          <MiniBrowser compact variant="mobile" />
         </div>
         <div className="ios-home-indicator" />
       </div>

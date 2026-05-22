@@ -1,22 +1,12 @@
 import { useCallback, useRef, useState } from "react";
 import { useVpn } from "../vpn/VpnContext";
+import {
+  DEFAULT_HOME,
+  QUICK_LINKS,
+  normalizeTargetUrl,
+  toProxyUrl,
+} from "./proxy";
 import "./MiniBrowser.css";
-
-const HOME = "https://duckduckgo.com/";
-const QUICK_LINKS = [
-  { label: "DuckDuckGo", url: "https://duckduckgo.com/" },
-  { label: "Wikipedia", url: "https://en.wikipedia.org/wiki/Main_Page" },
-  { label: "MDN", url: "https://developer.mozilla.org/" },
-  { label: "Example", url: "https://example.com/" },
-];
-
-function normalizeUrl(raw: string): string {
-  const trimmed = raw.trim();
-  if (!trimmed) return HOME;
-  if (/^https?:\/\//i.test(trimmed)) return trimmed;
-  if (trimmed.includes(".") && !trimmed.includes(" ")) return `https://${trimmed}`;
-  return `https://duckduckgo.com/?q=${encodeURIComponent(trimmed)}`;
-}
 
 type MiniBrowserProps = {
   initialUrl?: string;
@@ -25,25 +15,26 @@ type MiniBrowserProps = {
 };
 
 export function MiniBrowser({
-  initialUrl = HOME,
+  initialUrl = DEFAULT_HOME,
   compact = false,
   variant = "desktop",
 }: MiniBrowserProps) {
   const { connected, server } = useVpn();
-  const [input, setInput] = useState(initialUrl);
-  const [url, setUrl] = useState(initialUrl);
-  const [history, setHistory] = useState<string[]>([initialUrl]);
+  const startTarget = normalizeTargetUrl(initialUrl);
+  const [input, setInput] = useState(startTarget);
+  const [targetUrl, setTargetUrl] = useState(startTarget);
+  const [history, setHistory] = useState<string[]>([startTarget]);
   const [histIdx, setHistIdx] = useState(0);
-  const [frameBlocked, setFrameBlocked] = useState(false);
+  const [loadError, setLoadError] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const loadTimerRef = useRef<number | null>(null);
+  const iframeSrc = toProxyUrl(targetUrl);
 
   const navigate = useCallback(
     (next: string) => {
-      const normalized = normalizeUrl(next);
-      setUrl(normalized);
+      const normalized = normalizeTargetUrl(next);
+      setTargetUrl(normalized);
       setInput(normalized);
-      setFrameBlocked(false);
+      setLoadError(false);
       setHistory((h) => {
         const slice = h.slice(0, histIdx + 1);
         return [...slice, normalized];
@@ -60,9 +51,9 @@ export function MiniBrowser({
     const next = histIdx - 1;
     setHistIdx(next);
     const u = history[next];
-    setUrl(u);
+    setTargetUrl(u);
     setInput(u);
-    setFrameBlocked(false);
+    setLoadError(false);
   };
 
   const forward = () => {
@@ -70,30 +61,14 @@ export function MiniBrowser({
     const next = histIdx + 1;
     setHistIdx(next);
     const u = history[next];
-    setUrl(u);
+    setTargetUrl(u);
     setInput(u);
-    setFrameBlocked(false);
+    setLoadError(false);
   };
 
   const refresh = () => {
-    setFrameBlocked(false);
-    if (iframeRef.current) iframeRef.current.src = url;
-  };
-
-  const onFrameLoad = () => {
-    if (loadTimerRef.current) window.clearTimeout(loadTimerRef.current);
-    loadTimerRef.current = window.setTimeout(() => {
-      try {
-        const doc = iframeRef.current?.contentDocument;
-        if (doc && doc.body && doc.body.innerHTML === "") {
-          setFrameBlocked(true);
-        } else {
-          setFrameBlocked(false);
-        }
-      } catch {
-        setFrameBlocked(false);
-      }
-    }, 400);
+    setLoadError(false);
+    if (iframeRef.current) iframeRef.current.src = toProxyUrl(targetUrl);
   };
 
   return (
@@ -126,19 +101,22 @@ export function MiniBrowser({
             🛡️
           </span>
         )}
+        <span className="proxy-badge" title="Traffic routed via VM proxy">
+          Proxy
+        </span>
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           spellCheck={false}
-          placeholder="Search or enter URL"
+          placeholder="Enter URL (e.g. google.com)"
         />
         <button type="submit">Go</button>
         <a
           className="open-ext"
-          href={url}
+          href={iframeSrc}
           target="_blank"
           rel="noopener noreferrer"
-          title="Open in new tab"
+          title="Open proxied page in new tab"
         >
           ↗
         </a>
@@ -155,25 +133,25 @@ export function MiniBrowser({
       )}
 
       <div className="mini-browser-viewport">
-        {frameBlocked && (
+        {loadError && (
           <div className="frame-fallback">
-            <p>This site blocks embedded views.</p>
-            <button type="button" onClick={() => window.open(url, "_blank")}>
+            <p>Could not load this page through the proxy.</p>
+            <button type="button" onClick={() => window.open(iframeSrc, "_blank")}>
               Open in new tab
             </button>
-            <button type="button" onClick={() => navigate(HOME)}>
+            <button type="button" onClick={() => navigate(DEFAULT_HOME)}>
               Go home
             </button>
           </div>
         )}
         <iframe
           ref={iframeRef}
-          key={url}
-          src={url}
+          key={iframeSrc}
+          src={iframeSrc}
           title="Browser"
           sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-downloads"
-          onLoad={onFrameLoad}
-          onError={() => setFrameBlocked(true)}
+          onLoad={() => setLoadError(false)}
+          onError={() => setLoadError(true)}
         />
       </div>
     </div>

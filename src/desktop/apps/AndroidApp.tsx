@@ -27,7 +27,7 @@ export function AndroidApp() {
           <button type="button" className="android-back" onClick={() => setScreen("home")}>
             ‹ Apps
           </button>
-          <MiniBrowser compact variant="mobile" initialUrl="https://duckduckgo.com/" />
+          <MiniBrowser compact variant="mobile" />
         </div>
         <div className="android-nav">
           <span />

@@ -67,7 +67,7 @@ export function Windows11App() {
         </section>
       ) : (
         <section className="win11-edge">
-          <MiniBrowser initialUrl="https://duckduckgo.com/" />
+          <MiniBrowser />
         </section>
       )}
     </div>

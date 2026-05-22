@@ -54,6 +54,16 @@
   line-height: 1;
 }
 
+.proxy-badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #e8f0fe;
+  color: #1a73e8;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 .mini-browser-bar input {
   flex: 1;
   min-width: 0;
